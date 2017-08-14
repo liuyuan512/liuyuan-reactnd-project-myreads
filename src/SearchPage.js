@@ -7,7 +7,7 @@ class SearchPage extends Component{
     }
 
     searchChange=(query)=>{
-        this.setState({query:query})
+        this.setState({query:query.trim()})
         if(query){
             this.props.onSearchChange(query)
         }
@@ -33,6 +33,7 @@ class SearchPage extends Component{
                                value={this.state.query}
                         />
                     </div>
+                    {JSON.stringify(this.state.query)}
                 </div>
                 <div className="search-books-results">
                     <ol className="books-grid">

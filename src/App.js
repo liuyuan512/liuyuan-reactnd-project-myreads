@@ -7,37 +7,29 @@ import { Route } from 'react-router-dom'
 
 class BooksApp extends React.Component {
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
     books: [],
     searchResults:[]
   }
 
   componentDidMount(){
       BooksAPI.getAll().then((books)=>{
-          this.setState({books})
+          this.setState({books:books})
       })
   }
 
 
   updateBook=(book,shelf)=>{
-      let booksArray = []
-
-      booksArray = this.state.books
-
-      const updatBook = booksArray.find(b => b.id === book.id);
-      updatBook.shelf = shelf
-
-      this.setState({books:booksArray})
-
-      BooksAPI.update(book, shelf)
+      if(book.shelf !== shelf){
+          BooksAPI.update(book,shelf).then(()=>{
+              book.shelf = shelf
+              this.setState((state)=>({
+                  books:state.books.filter((b)=>b.id !== book.id).concat([book])
+              }))
+          })
+      }
   }
 
-  changeBook=(query)=>{
+  searchBookList=(query)=>{
 
       BooksAPI.search(query, 10).then((searchResults) => {
 
@@ -65,15 +57,6 @@ class BooksApp extends React.Component {
       })
   }
 
-  addToShelf=(book,shelf)=>{
-      book.shelf=shelf
-
-      this.setState((state)=>{
-          state.books.push(book)
-      })
-      BooksAPI.update(book, shelf)
-
-  }
 
   render() {
     return (
@@ -82,9 +65,9 @@ class BooksApp extends React.Component {
             exact path="/search"
             render={()=>(
                 <SearchPage
-                    onSearchChange={this.changeBook}
+                    onSearchChange={this.searchBookList}
                     searchResults={this.state.searchResults}
-                    onAddToShelf={this.addToShelf}
+                    onAddToShelf={this.updateBook}
                 />
             )}
         />
@@ -92,8 +75,8 @@ class BooksApp extends React.Component {
             exact path="/"
             render={()=> (
                 <ListBooks
-                    books={this.state.books}
-                    onUpdateBook={this.updateBook}
+                 onUpdateBook={this.updateBook}
+                 books={this.state.books}
                 />
             )}
         />
