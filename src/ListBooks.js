@@ -5,14 +5,11 @@ import * as BooksAPI from './BooksAPI'
 import Book from './Book'
 
 
-class ListBooks extends Component{
-
-    static propTypes ={
-        books:PropTypes.array.isRequired,
-        onUpdateBook:PropTypes.func.isRequired
-    }
-
-    render(){
+const ListBooks = (props)=>{
+    //   const propTypes ={
+    //     books:PropTypes.array.isRequired,
+    //     onUpdateBook:PropTypes.func.isRequired
+    // }
 
         return(
             <div className="list-books">
@@ -28,10 +25,10 @@ class ListBooks extends Component{
                                 <h2 className="bookshelf-title">Currently Reading</h2>
                                 <div className="bookshelf-books">
                                     <ol className="books-grid">
-                                        {this.props.books.filter((c) => (c.shelf === "currentlyReading")).map((book)=>(
+                                        {props.books.filter((c) => (c.shelf === "currentlyReading")).map((book)=>(
                                             <Book
                                                 book={book}
-                                                onUpdateBook={this.props.onUpdateBook}
+                                                onUpdateBook={props.onUpdateBook}
                                             />
                                         ))}
                                     </ol>
@@ -42,10 +39,10 @@ class ListBooks extends Component{
                                 <h2 className="bookshelf-title">Want To Read</h2>
                                 <div className="bookshelf-books">
                                     <ol className="books-grid">
-                                        {this.props.books.filter((c) => (c.shelf === "wantToRead")).map((book)=>(
+                                        {props.books.filter((c) => (c.shelf === "wantToRead")).map((book)=>(
                                             <Book
                                                 book={book}
-                                                onUpdateBook={this.props.onUpdateBook}
+                                                onUpdateBook={props.onUpdateBook}
                                             />
                                         ))}
                                     </ol>
@@ -56,10 +53,10 @@ class ListBooks extends Component{
                                 <h2 className="bookshelf-title">Read</h2>
                                 <div className="bookshelf-books">
                                     <ol className="books-grid">
-                                        {this.props.books.filter((c) => (c.shelf === "read")).map((book)=>(
+                                        {props.books.filter((c) => (c.shelf === "read")).map((book)=>(
                                             <Book
                                                 book={book}
-                                                onUpdateBook={this.props.onUpdateBook}
+                                                onUpdateBook={props.onUpdateBook}
                                             />
                                         ))}
                                     </ol>
@@ -79,9 +76,7 @@ class ListBooks extends Component{
                     <Link to="/search">Add a book</Link>
                 </div>
             </div>
-
         )
-    }
 }
 
 export default ListBooks
